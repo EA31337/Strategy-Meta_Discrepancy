@@ -125,7 +125,14 @@ class Stg_Meta_Discrepancy : public Strategy {
    * Gets strategy.
    */
   Ref<Strategy> GetStrategy() {
-    // Chart *_chart = (Chart *)_indi;
+    uint _shift = 0; // @fixme
+    BarOHLC _ohlc[2];
+    Chart *_chart = trade.GetChart();
+    ChartEntry _ohlc_d1_0 = _chart.GetEntry(PERIOD_D1, _shift, _chart.GetSymbol());
+    ChartEntry _ohlc_w1_0 = _chart.GetEntry(PERIOD_W1, _shift, _chart.GetSymbol());
+    _ohlc[0] = _chart.GetOHLC(_shift);
+    _ohlc_d1_0.bar.ohlc.IsBear();
+    _ohlc_w1_0.bar.ohlc.IsBear();
     Ref<Strategy> _strat_ref = strats.GetByKey(0);
     // IndicatorSignal _signals = _indi.GetSignals(4, _shift);
     /*
