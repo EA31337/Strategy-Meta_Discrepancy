@@ -6,7 +6,7 @@
 
 /**
  * @file
- * Implements Pivot meta strategy.
+ * Implements Discrepancy meta strategy.
  */
 
 // Includes the main code.

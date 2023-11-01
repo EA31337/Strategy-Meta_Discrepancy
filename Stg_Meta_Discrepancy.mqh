@@ -1,86 +1,88 @@
 /**
  * @file
- * Implements Pivot meta strategy.
+ * Implements Discrepancy meta strategy.
  */
 
 // Prevents processing this includes file multiple times.
-#ifndef STG_META_PIVOT_MQH
-#define STG_META_PIVOT_MQH
+#ifndef STG_META_DISCREPANCY_MQH
+#define STG_META_DISCREPANCY_MQH
 
 // User input params.
-INPUT2_GROUP("Meta Pivot strategy: main params");
-INPUT2 ENUM_STRATEGY Meta_Pivot_Strategy_Pivot1 = STRAT_MA_BREAKOUT;  // Strategy for Pivot in range S1-R1
-INPUT2 ENUM_STRATEGY Meta_Pivot_Strategy_Pivot2 = STRAT_OSCILLATOR;   // Strategy for Pivot in range S2-R2
-INPUT2 ENUM_STRATEGY Meta_Pivot_Strategy_Pivot3 = STRAT_MA_TREND;     // Strategy for Pivot in range S3-R3
-INPUT2 ENUM_STRATEGY Meta_Pivot_Strategy_Pivot4 = STRAT_BANDS;        // Strategy for Pivot in and beyond range S4-R4
-INPUT3_GROUP("Meta Pivot strategy: common params");
-INPUT3 float Meta_Pivot_LotSize = 0;                // Lot size
-INPUT3 int Meta_Pivot_SignalOpenMethod = 0;         // Signal open method
-INPUT3 float Meta_Pivot_SignalOpenLevel = 0;        // Signal open level
-INPUT3 int Meta_Pivot_SignalOpenFilterMethod = 32;  // Signal open filter method
-INPUT3 int Meta_Pivot_SignalOpenFilterTime = 3;     // Signal open filter time (0-31)
-INPUT3 int Meta_Pivot_SignalOpenBoostMethod = 0;    // Signal open boost method
-INPUT3 int Meta_Pivot_SignalCloseMethod = 0;        // Signal close method
-INPUT3 int Meta_Pivot_SignalCloseFilter = 32;       // Signal close filter (-127-127)
-INPUT3 float Meta_Pivot_SignalCloseLevel = 0;       // Signal close level
-INPUT3 int Meta_Pivot_PriceStopMethod = 0;          // Price limit method
-INPUT3 float Meta_Pivot_PriceStopLevel = 2;         // Price limit level
-INPUT3 int Meta_Pivot_TickFilterMethod = 32;        // Tick filter method (0-255)
-INPUT3 float Meta_Pivot_MaxSpread = 4.0;            // Max spread to trade (in pips)
-INPUT3 short Meta_Pivot_Shift = 0;                  // Shift
-INPUT3 float Meta_Pivot_OrderCloseLoss = 200;       // Order close loss
-INPUT3 float Meta_Pivot_OrderCloseProfit = 200;     // Order close profit
-INPUT3 int Meta_Pivot_OrderCloseTime = 2880;        // Order close time in mins (>0) or bars (<0)
-INPUT3_GROUP("Meta Pivot strategy: Pivot indicator params");
-INPUT3 ENUM_PP_TYPE Meta_Pivot_Indi_Pivot_Type = PP_CAMARILLA;                   // Calculation method
-INPUT3 int Meta_Pivot_Indi_Pivot_Shift = 1;                                      // Shift
-INPUT3 ENUM_IDATA_SOURCE_TYPE Meta_Pivot_Indi_Pivot_SourceType = IDATA_BUILTIN;  // Source type
+INPUT2_GROUP("Meta Discrepancy strategy: main params");
+INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy1 =
+    STRAT_MA_BREAKOUT;  // Strategy for Discrepancy in range S1-R1
+INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy2 =
+    STRAT_OSCILLATOR;  // Strategy for Discrepancy in range S2-R2
+INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy3 =
+    STRAT_MA_TREND;  // Strategy for Discrepancy in range S3-R3
+INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy4 =
+    STRAT_BANDS;  // Strategy for Discrepancy in and beyond range S4-R4
+INPUT3_GROUP("Meta Discrepancy strategy: common params");
+INPUT3 float Meta_Discrepancy_LotSize = 0;                // Lot size
+INPUT3 int Meta_Discrepancy_SignalOpenMethod = 0;         // Signal open method
+INPUT3 float Meta_Discrepancy_SignalOpenLevel = 0;        // Signal open level
+INPUT3 int Meta_Discrepancy_SignalOpenFilterMethod = 32;  // Signal open filter method
+INPUT3 int Meta_Discrepancy_SignalOpenFilterTime = 3;     // Signal open filter time (0-31)
+INPUT3 int Meta_Discrepancy_SignalOpenBoostMethod = 0;    // Signal open boost method
+INPUT3 int Meta_Discrepancy_SignalCloseMethod = 0;        // Signal close method
+INPUT3 int Meta_Discrepancy_SignalCloseFilter = 32;       // Signal close filter (-127-127)
+INPUT3 float Meta_Discrepancy_SignalCloseLevel = 0;       // Signal close level
+INPUT3 int Meta_Discrepancy_PriceStopMethod = 0;          // Price limit method
+INPUT3 float Meta_Discrepancy_PriceStopLevel = 2;         // Price limit level
+INPUT3 int Meta_Discrepancy_TickFilterMethod = 32;        // Tick filter method (0-255)
+INPUT3 float Meta_Discrepancy_MaxSpread = 4.0;            // Max spread to trade (in pips)
+INPUT3 short Meta_Discrepancy_Shift = 0;                  // Shift
+INPUT3 float Meta_Discrepancy_OrderCloseLoss = 200;       // Order close loss
+INPUT3 float Meta_Discrepancy_OrderCloseProfit = 200;     // Order close profit
+INPUT3 int Meta_Discrepancy_OrderCloseTime = 2880;        // Order close time in mins (>0) or bars (<0)
 
 // Enums.
-enum META_PIVOT_INDI_PIVOT_MODE {
-  META_PIVOT_INDI_PIVOT_PP = 0,
-  META_PIVOT_INDI_PIVOT_R1,
-  META_PIVOT_INDI_PIVOT_R2,
-  META_PIVOT_INDI_PIVOT_R3,
-  META_PIVOT_INDI_PIVOT_R4,
-  META_PIVOT_INDI_PIVOT_S1,
-  META_PIVOT_INDI_PIVOT_S2,
-  META_PIVOT_INDI_PIVOT_S3,
-  META_PIVOT_INDI_PIVOT_S4,
+enum META_DISCREPANCY_INDI_DISCREPANCY_MODE {
+  META_DISCREPANCY_INDI_DISCREPANCY_PP = 0,
+  META_DISCREPANCY_INDI_DISCREPANCY_R1,
+  META_DISCREPANCY_INDI_DISCREPANCY_R2,
+  META_DISCREPANCY_INDI_DISCREPANCY_R3,
+  META_DISCREPANCY_INDI_DISCREPANCY_R4,
+  META_DISCREPANCY_INDI_DISCREPANCY_S1,
+  META_DISCREPANCY_INDI_DISCREPANCY_S2,
+  META_DISCREPANCY_INDI_DISCREPANCY_S3,
+  META_DISCREPANCY_INDI_DISCREPANCY_S4,
 };
 
 // Structs.
 // Defines struct with default user strategy values.
-struct Stg_Meta_Pivot_Params_Defaults : StgParams {
-  Stg_Meta_Pivot_Params_Defaults()
-      : StgParams(::Meta_Pivot_SignalOpenMethod, ::Meta_Pivot_SignalOpenFilterMethod, ::Meta_Pivot_SignalOpenLevel,
-                  ::Meta_Pivot_SignalOpenBoostMethod, ::Meta_Pivot_SignalCloseMethod, ::Meta_Pivot_SignalCloseFilter,
-                  ::Meta_Pivot_SignalCloseLevel, ::Meta_Pivot_PriceStopMethod, ::Meta_Pivot_PriceStopLevel,
-                  ::Meta_Pivot_TickFilterMethod, ::Meta_Pivot_MaxSpread, ::Meta_Pivot_Shift) {
-    Set(STRAT_PARAM_LS, ::Meta_Pivot_LotSize);
-    Set(STRAT_PARAM_OCL, ::Meta_Pivot_OrderCloseLoss);
-    Set(STRAT_PARAM_OCP, ::Meta_Pivot_OrderCloseProfit);
-    Set(STRAT_PARAM_OCT, ::Meta_Pivot_OrderCloseTime);
-    Set(STRAT_PARAM_SOFT, ::Meta_Pivot_SignalOpenFilterTime);
+struct Stg_Meta_Discrepancy_Params_Defaults : StgParams {
+  Stg_Meta_Discrepancy_Params_Defaults()
+      : StgParams(::Meta_Discrepancy_SignalOpenMethod, ::Meta_Discrepancy_SignalOpenFilterMethod,
+                  ::Meta_Discrepancy_SignalOpenLevel, ::Meta_Discrepancy_SignalOpenBoostMethod,
+                  ::Meta_Discrepancy_SignalCloseMethod, ::Meta_Discrepancy_SignalCloseFilter,
+                  ::Meta_Discrepancy_SignalCloseLevel, ::Meta_Discrepancy_PriceStopMethod,
+                  ::Meta_Discrepancy_PriceStopLevel, ::Meta_Discrepancy_TickFilterMethod, ::Meta_Discrepancy_MaxSpread,
+                  ::Meta_Discrepancy_Shift) {
+    Set(STRAT_PARAM_LS, ::Meta_Discrepancy_LotSize);
+    Set(STRAT_PARAM_OCL, ::Meta_Discrepancy_OrderCloseLoss);
+    Set(STRAT_PARAM_OCP, ::Meta_Discrepancy_OrderCloseProfit);
+    Set(STRAT_PARAM_OCT, ::Meta_Discrepancy_OrderCloseTime);
+    Set(STRAT_PARAM_SOFT, ::Meta_Discrepancy_SignalOpenFilterTime);
   }
 };
 
-class Stg_Meta_Pivot : public Strategy {
+class Stg_Meta_Discrepancy : public Strategy {
  protected:
   DictStruct<long, Ref<Strategy>> strats;
 
  public:
-  Stg_Meta_Pivot(StgParams &_sparams, TradeParams &_tparams, ChartParams &_cparams, string _name = "")
+  Stg_Meta_Discrepancy(StgParams &_sparams, TradeParams &_tparams, ChartParams &_cparams, string _name = "")
       : Strategy(_sparams, _tparams, _cparams, _name) {}
 
-  static Stg_Meta_Pivot *Init(ENUM_TIMEFRAMES _tf = NULL, EA *_ea = NULL) {
+  static Stg_Meta_Discrepancy *Init(ENUM_TIMEFRAMES _tf = NULL, EA *_ea = NULL) {
     // Initialize strategy initial values.
-    Stg_Meta_Pivot_Params_Defaults stg_meta_pivot_defaults;
-    StgParams _stg_params(stg_meta_pivot_defaults);
+    Stg_Meta_Discrepancy_Params_Defaults stg_meta_discrepancy_defaults;
+    StgParams _stg_params(stg_meta_discrepancy_defaults);
     // Initialize Strategy instance.
     ChartParams _cparams(_tf, _Symbol);
     TradeParams _tparams;
-    Strategy *_strat = new Stg_Meta_Pivot(_stg_params, _tparams, _cparams, "(Meta) Pivot");
+    Strategy *_strat = new Stg_Meta_Discrepancy(_stg_params, _tparams, _cparams, "(Meta) Discrepancy");
     return _strat;
   }
 
@@ -88,14 +90,10 @@ class Stg_Meta_Pivot : public Strategy {
    * Event on strategy's init.
    */
   void OnInit() {
-    StrategyAdd(Meta_Pivot_Strategy_Pivot1, 0);
-    StrategyAdd(Meta_Pivot_Strategy_Pivot2, 1);
-    StrategyAdd(Meta_Pivot_Strategy_Pivot3, 2);
-    StrategyAdd(Meta_Pivot_Strategy_Pivot4, 3);
-    // Initialize indicators.
-    IndiPivotParams _indi_params(::Meta_Pivot_Indi_Pivot_Type, ::Meta_Pivot_Indi_Pivot_Shift);
-    _indi_params.SetTf(PERIOD_D1);
-    SetIndicator(new Indi_Pivot(_indi_params));
+    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy1, 0);
+    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy2, 1);
+    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy3, 2);
+    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy4, 3);
   }
 
   /**
@@ -127,41 +125,12 @@ class Stg_Meta_Pivot : public Strategy {
    * Gets strategy.
    */
   Ref<Strategy> GetStrategy() {
-    Indi_Pivot *_indi = GetIndicator();
-    Chart *_chart = (Chart *)_indi;
-    int _pp_shift = ::Meta_Pivot_Indi_Pivot_Shift;  // @fixme
-    bool _result =
-        _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _pp_shift) && _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _pp_shift + 3);
-    Ref<Strategy> _strat_ref;
-    if (!_result) {
-      // Returns false when indicator data is not valid.
-      return _strat_ref;
-    }
+    // Chart *_chart = (Chart *)_indi;
+    Ref<Strategy> _strat_ref = strats.GetByKey(0);
     // IndicatorSignal _signals = _indi.GetSignals(4, _shift);
-    IndicatorDataEntry _entry = _indi[_pp_shift + 1];
+    /*
     float _curr_price = (float)_chart.GetPrice(PRICE_TYPICAL, _pp_shift);
-    float _pp = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_PP);
-    float _r1 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_R1);
-    float _r2 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_R2);
-    float _r3 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_R3);
-    float _r4 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_R4);
-    float _s1 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_S1);
-    float _s2 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_S2);
-    float _s3 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_S3);
-    float _s4 = _entry.GetValue<float>((int)META_PIVOT_INDI_PIVOT_S4);
-    if (_curr_price > _s1 && _curr_price < _r1) {
-      // Price value is between S1 and R1 pivot range.
-      _strat_ref = strats.GetByKey(0);
-    } else if (_curr_price > _s2 && _curr_price < _r2) {
-      // Price value is between S2 and R2 pivot range.
-      _strat_ref = strats.GetByKey(1);
-    } else if (_curr_price > _s3 && _curr_price < _r3) {
-      // Price value is between S3 and R3 pivot range.
-      _strat_ref = strats.GetByKey(2);
-    } else {
-      // Price value is between S4 and R4 and beyond pivot range.
-      _strat_ref = strats.GetByKey(3);
-    }
+    */
     return _strat_ref;
   }
 
@@ -215,4 +184,4 @@ class Stg_Meta_Pivot : public Strategy {
   }
 };
 
-#endif  // STG_META_PIVOT_MQH
+#endif  // STG_META_DISCREPANCY_MQH
