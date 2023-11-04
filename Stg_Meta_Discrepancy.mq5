@@ -40,8 +40,7 @@ input bool Info_On_Chart = true;          // Display info on chart.
 // Defines.
 #define ea_name "Strategy Meta Discrepancy"
 #define ea_version "2.000"
-#define ea_desc \
-  "Discrepancy meta strategy to trade with different strategies based on the current daily/weekly pivot range."
+#define ea_desc "Trades with different strategy on discrepancy between bear/bull candles from 2 different timeframes."
 #define ea_link "https://github.com/EA31337/Strategy-Meta_Discrepancy"
 #define ea_author "EA31337 Ltd"
 
