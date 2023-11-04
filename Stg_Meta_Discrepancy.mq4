@@ -6,8 +6,8 @@
 
 /**
  * @file
- * Implements Pivot meta strategy.
+ * Implements Discrepancy meta strategy.
  */
 
 // Includes the main code.
-#include "Stg_Meta_Pivot.mq5"
+#include "Stg_Meta_Discrepancy.mq5"

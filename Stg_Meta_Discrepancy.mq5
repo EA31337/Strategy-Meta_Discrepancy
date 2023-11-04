@@ -1,6 +1,6 @@
 /**
  * @file
- * Implements Pivot meta strategy.
+ * Implements Discrepancy meta strategy.
  */
 
 // Includes conditional compilation directives.
@@ -17,12 +17,15 @@
 #include <EA31337-classes/Indicators/indicators.h>
 
 // Includes other strategy files.
-#ifdef __strategies__
-#include "../enum.h"
-#include "../includes.h"
-#else
+#ifndef __strategies__
 #include <EA31337-strategies/enum.h>
 #include <EA31337-strategies/includes.h>
+#include <EA31337-strategies/manager.h>
+#endif
+#ifdef __strategies_meta__
+#include "../enum.h"
+#include "../includes.h"
+#include "../manager.h"
 #endif
 
 // Inputs.
@@ -32,13 +35,14 @@ input ENUM_LOG_LEVEL Log_Level = V_INFO;  // Log level.
 input bool Info_On_Chart = true;          // Display info on chart.
 
 // Includes strategy class.
-#include "Stg_Meta_Pivot.mqh"
+#include "Stg_Meta_Discrepancy.mqh"
 
 // Defines.
-#define ea_name "Strategy Meta Pivot"
+#define ea_name "Strategy Meta Discrepancy"
 #define ea_version "2.000"
-#define ea_desc "Pivot meta strategy to trade with different strategies based on the current daily/weekly pivot range."
-#define ea_link "https://github.com/EA31337/Strategy-Meta_Pivot"
+#define ea_desc \
+  "Discrepancy meta strategy to trade with different strategies based on the current daily/weekly pivot range."
+#define ea_link "https://github.com/EA31337/Strategy-Meta_Discrepancy"
 #define ea_author "EA31337 Ltd"
 
 // Properties.
@@ -64,7 +68,7 @@ int OnInit() {
   bool _result = true;
   EAParams ea_params(__FILE__, Log_Level);
   ea = new EA(ea_params);
-  _result &= ea.StrategyAdd<Stg_Meta_Pivot>(Active_Tfs);
+  _result &= ea.StrategyAdd<Stg_Meta_Discrepancy>(Active_Tfs);
   return (_result ? INIT_SUCCEEDED : INIT_FAILED);
 }
 
