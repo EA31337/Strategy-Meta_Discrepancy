@@ -9,14 +9,9 @@
 
 // User input params.
 INPUT2_GROUP("Meta Discrepancy strategy: main params");
+INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Main = STRAT_MA_BREAKOUT;  // Main strategy
 INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy1 =
-    STRAT_MA_BREAKOUT;  // Strategy for Discrepancy in range S1-R1
-INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy2 =
-    STRAT_OSCILLATOR;  // Strategy for Discrepancy in range S2-R2
-INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy3 =
-    STRAT_MA_TREND;  // Strategy for Discrepancy in range S3-R3
-INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy4 =
-    STRAT_BANDS;  // Strategy for Discrepancy in and beyond range S4-R4
+    STRAT_OSCILLATOR;  // Strategy on daily/weekly candle discrepancy
 INPUT3_GROUP("Meta Discrepancy strategy: common params");
 INPUT3 float Meta_Discrepancy_LotSize = 0;                // Lot size
 INPUT3 int Meta_Discrepancy_SignalOpenMethod = 0;         // Signal open method
@@ -35,19 +30,6 @@ INPUT3 short Meta_Discrepancy_Shift = 0;                  // Shift
 INPUT3 float Meta_Discrepancy_OrderCloseLoss = 200;       // Order close loss
 INPUT3 float Meta_Discrepancy_OrderCloseProfit = 200;     // Order close profit
 INPUT3 int Meta_Discrepancy_OrderCloseTime = 2880;        // Order close time in mins (>0) or bars (<0)
-
-// Enums.
-enum META_DISCREPANCY_INDI_DISCREPANCY_MODE {
-  META_DISCREPANCY_INDI_DISCREPANCY_PP = 0,
-  META_DISCREPANCY_INDI_DISCREPANCY_R1,
-  META_DISCREPANCY_INDI_DISCREPANCY_R2,
-  META_DISCREPANCY_INDI_DISCREPANCY_R3,
-  META_DISCREPANCY_INDI_DISCREPANCY_R4,
-  META_DISCREPANCY_INDI_DISCREPANCY_S1,
-  META_DISCREPANCY_INDI_DISCREPANCY_S2,
-  META_DISCREPANCY_INDI_DISCREPANCY_S3,
-  META_DISCREPANCY_INDI_DISCREPANCY_S4,
-};
 
 // Structs.
 // Defines struct with default user strategy values.
@@ -90,10 +72,8 @@ class Stg_Meta_Discrepancy : public Strategy {
    * Event on strategy's init.
    */
   void OnInit() {
-    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy1, 0);
-    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy2, 1);
-    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy3, 2);
-    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy4, 3);
+    StrategyAdd(Meta_Discrepancy_Strategy_Main, 0);
+    StrategyAdd(Meta_Discrepancy_Strategy_Discrepancy1, 1);
   }
 
   /**
@@ -125,19 +105,16 @@ class Stg_Meta_Discrepancy : public Strategy {
    * Gets strategy.
    */
   Ref<Strategy> GetStrategy() {
-    uint _shift = 0; // @fixme
+    uint _shift = 0;  // @fixme
     BarOHLC _ohlc[2];
     Chart *_chart = trade.GetChart();
     ChartEntry _ohlc_d1_0 = _chart.GetEntry(PERIOD_D1, _shift, _chart.GetSymbol());
     ChartEntry _ohlc_w1_0 = _chart.GetEntry(PERIOD_W1, _shift, _chart.GetSymbol());
-    _ohlc[0] = _chart.GetOHLC(_shift);
-    _ohlc_d1_0.bar.ohlc.IsBear();
-    _ohlc_w1_0.bar.ohlc.IsBear();
     Ref<Strategy> _strat_ref = strats.GetByKey(0);
-    // IndicatorSignal _signals = _indi.GetSignals(4, _shift);
-    /*
-    float _curr_price = (float)_chart.GetPrice(PRICE_TYPICAL, _pp_shift);
-    */
+    _ohlc[0] = _chart.GetOHLC(_shift);
+    if (_ohlc_d1_0.bar.ohlc.IsBull() != _ohlc_w1_0.bar.ohlc.IsBull()) {
+      _strat_ref = strats.GetByKey(1);
+    }
     return _strat_ref;
   }
 
