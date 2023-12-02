@@ -9,9 +9,9 @@
 
 // User input params.
 INPUT2_GROUP("Meta Discrepancy strategy: main params");
-INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Main = STRAT_OSCILLATOR_RANGE;  // Main strategy
+INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Main = STRAT_RSI;  // Main strategy
 INPUT2 ENUM_STRATEGY Meta_Discrepancy_Strategy_Discrepancy1 =
-    STRAT_CHAIKIN;  // Strategy on daily/weekly candle discrepancy
+    STRAT_MA_BREAKOUT;  // Strategy on daily/weekly candle discrepancy
 INPUT3_GROUP("Meta Discrepancy strategy: common params");
 INPUT3 float Meta_Discrepancy_LotSize = 0;                // Lot size
 INPUT3 int Meta_Discrepancy_SignalOpenMethod = 0;         // Signal open method
