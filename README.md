@@ -14,7 +14,7 @@ on discrepancy between bear/bull candles from 2 different timeframes.
 
 | Tag      | Framework | Strategies |
 |:--------:|:---------:|:----------:|
-| v2.000   | v3.000.1  | v2.000     |
+| v2.000   | v3.000.2  | v2.000     |
 
 <!-- Named links -->
 
